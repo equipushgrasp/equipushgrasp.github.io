@@ -155,3 +155,15 @@ body {
 #interpolation-image-wrapper img {
   border-radius: 5px;
 }
+
+.publication-links .button.is-dark.custom-button-text {
+  color: #ffffff !important;
+}
+
+.publication-links .button.is-dark.custom-button-text:hover {
+  color: #ffffff !important;
+}
+
+.publication-links .button.is-dark.custom-button-text span {
+  color: #ffffff !important;
+}
