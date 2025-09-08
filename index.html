@@ -176,15 +176,7 @@
                                 <span>Code</span>
                                 </a>
                             </span>
-                            <!-- Dataset Link.
-                            <span class="link-block">
-                              <a href="https://github.com/google/nerfies/releases/tag/0.1"
-                                 class="external-link button is-normal is-rounded is-dark">
-                                <span class="icon">
-                                    <i class="far fa-images"></i>
-                                </span>
-                                <span>Data</span>
-                                </a> -->
+
                         </div>
 
                     </div>
@@ -259,6 +251,331 @@
         </div>
     </div>
 </section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+            <div class="column">
+                <h2 class="title is-3">Introduction</h2>
+                <h4 class="title is-4">Summary of EPG</h4>
+                <div class="content has-text-justified">
+                    <p>
+                        In this paper, we introduce the \textbf{Equivariant PushGrasp (EPG)} Network, 
+                        a novel framework for efficient goal-conditioned push-grasp policy learning in 
+                        cluttered environments. EPG leverages inherent task symmetries to improve both 
+                        sample efficiency and performance. Specifically, we model the pushing and grasping 
+                        policies using $SE(2)$-equivariant neural networks, embedding rotational and 
+                        translational symmetry as an inductive bias. This design substantially enhances 
+                        the model's generalization and data efficiency. Furthermore, we propose a
+                         self-supervised training approach that optimizes the pushing policy with a 
+                         reward signal defined as the change in grasping scores before and after each push. 
+                         This formulation simplifies the training procedure and naturally couples the learning 
+                         of pushing and grasping.
+                    </p>
+                    <p align="center">
+                        <img src="./static/images/teaser.png" alt="" style="width:90%"></img>
+                    </p>
+                    <p>
+                         The target object, specified by human instruction, is highlighted with a red mask (e.g., a banana). 
+                         At each step, the push action direction is represented by an arrow. Our method iteratively predicts 
+                         and executes push actions to create sufficient space for grasping the target. 
+                         The final grasp pose is shown as a blue rectangle, with green blocks indicating the gripper's fingers.
+                    </p>
+                    <p align="center">
+                        <img src="./static/images/pipeline.png"></img>
+                    </p>
+                    <p>
+                        The key contribution of our work is a novel push-grasp framework for efficient 
+                        target object retrieval. As illustrated above, our workflow
+                        consists of three key components: a CriticNet, a GraspNet, and a PushNet. 
+                        At each time step, GraspNet and PushNet generate a grasp action and a push action with 
+                        respect to the target object. CriticNet then evaluates the grasp action by assigning it a score. 
+                        If the score exceeds a predefined threshold $tau$ or the maximum number of push attempts is reached,
+                        the grasp action is executed. Otherwise, the push action is executed, and the process repeats with 
+                        an updated observation.
+                    </p>
+
+                </div>
+                <h4 class="title is-4">Two-Step Agent Learning</h4>
+                <div class="content has-text-justified">
+
+                    <p>
+                        Previous works often rely on complex alternating training between grasp and push networks, 
+                        which can lead to unstable convergence and difficulty in balancing learning dynamics.
+                        In contrast, we propose a simple two-step training process. First we train a universal, 
+                        goal-agnostic GraspNet together with a CriticNet that evaluates predicted grasps and returns a score. 
+                        Then, we use the difference in grasp scores before and after pushing, computed from the CriticNet,
+                         as a reward signal to train a goal-conditioned PushNet. This decoupled training strategy 
+                         eliminates the need for alternating optimization and its scheduling-related hyperparameters, 
+                         making the training more stable, controllable, and efficient.
+                    </p>
+                    <p align="center">
+                        <img src="./static/images/train_pipeline.png" style="width:100%"></img>
+                    </p>
+                    <p>
+                      Specifically, after the simulation scene is initialized, segmentation is first applied to obtain 
+                      object masks. The Grasp Imagination Module stores the initial state and simulates grasp attempts 
+                      for each mask sequentially. After each simulated grasp, the environment is restored to the initial state. 
+                      The training episode for pushing begins once a grasp attempt fails. The PushNet $phi$ will predict 
+                      the $Q$ value for all pushing actions, and an $epsilon$-greedy policy will be executed. 
+                      After the push action, the Grasp Imagination Module simulates the grasp action again to assess
+                       the new grasp feasibility. If the grasp succeeds, the push action is considered optimal, 
+                       and the reward is 1. If the grasp fails, we use an adaptive reward defined as the difference 
+                       between the predicted grasp scores before and after the push estimated by $sigma$, 
+                       as a good push should improve the grasp feasibility. The episode terminates when a simulated grasp 
+                       succeeds or the maximum pushing attempts are reached. The system then moves on to the next target 
+                       mask or re-initializes the scene if all masks are iterated.
+                    </p>
+                    <p align="center">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column">
+                <h2 class="title is-3">Simulation Experiments</h2>
+                <div class="content has-text-justified">
+                    <p>
+
+                    </p>
+                </div>
+                <!--                <div class="content has-text-centered" style="margin-top: 20px; margin-bottom: -10px">-->
+                <!--                    <p>-->
+                <!--                        <span style="margin-right: 360px;">$\textbf{Pile Scene}$  </span>-->
+                <!--                        $\textbf{Packed Scene}$-->
+                <!--                    </p>-->
+                <!--                </div>-->
+                <div class="column is-centered">
+                    <img src="./static/images/sim_setting.png" style="width:75%"></img>
+                </div>
+
+                <div class="content has-text-centered">
+                    <p>
+                        $\textbf{Visualization of Pile Scene}$
+                    </p>
+                </div>
+
+                <div class="columns is-centered">
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_1.mp4" style="border-radius:10px;"></video>
+
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_2.mp4" style="border-radius:10px;"></video>
+
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_3.mp4" style="border-radius:10px;"></video>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="columns is-centered">
+
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_6.mp4" style="border-radius:10px;"></video>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_5.mp4" style="border-radius:10px;"></video>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_4.mp4" style="border-radius:10px;"></video>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="content has-text-centered">
+                    <p>
+                        $\textbf{Visualization of Packed Scene}$
+                    </p>
+                </div>
+
+                <div class="columns is-centered">
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_7.mp4" style="border-radius:10px;"></video>
+
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_8.mp4" style="border-radius:10px;"></video>
+
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_9.mp4" style="border-radius:10px;"></video>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="columns is-centered">
+
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_10.mp4" style="border-radius:10px;"></video>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_11.mp4" style="border-radius:10px;"></video>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/sim_demo_12.mp4" style="border-radius:10px;"></video>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="column is-centered">
+                    <img src="./static/images/sim_result.png"></img>
+                </div>
+                <div class="content has-text-justified">
+                    <p>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column">
+                <h2 class="title is-3">Physical Experiments</h2>
+                <div class="content has-text-justified">
+                    <p>
+
+                    </p>
+                </div>
+                <div class="content has-text-justified">
+                    <p>
+    </p>
+                </div>
+                <div class="column is-centered" style="margin-top: -20px;">
+                    <img src="./static/images/phy_set.png"></img>
+                </div>
+                <div class="content has-text-centered" style="margin-top: 30px;">
+                    <p>
+                        $\textbf{Result Visualization}$
+                    </p>
+                </div>
+
+                <div class="columns is-centered">
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" controls="" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/packed1.mp4" style="border-radius:10px;"></video>
+                            <p style="text-align: center; font-size: 18px">Packed Scene 1</p>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" controls="" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/packed2.mp4" style="border-radius:10px;"></video>
+                            <p style="text-align: center; font-size: 18px">Packed Scene 2</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="columns is-centered">
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" controls="" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/pile1.mp4" style="border-radius:10px;"></video>
+                            <p style="text-align: center; font-size: 18px">Pile Scene 1</p>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" controls="" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/pile2.mp4" style="border-radius:10px;"></video>
+                            <p style="text-align: center; font-size: 18px">Pile Scene 2</p>
+                        </div>
+                    </div>
+                    <div class="column is-centered">
+                        <div class="video-container">
+                            <video class="center" controls="" playsinline="" autoplay="" loop="" muted=""
+                                   src="./static/videos/pile3.mp4" style="border-radius:10px;"></video>
+                            <p style="text-align: center; font-size: 18px">Pile Scene 3</p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="content has-text-centered" style="margin-top: 40px;">
+                    <p>
+                    </p>
+                </div>
+                <div class="content has-text-centered">
+                    <p>
+                        $\textbf{Quantitative Results}$
+                    </p>
+                </div>
+                <div class="column is-centered" style="margin-top: -25px;">
+                    <img src="./static/images/real_result.png"></img>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
+
+
+<footer class="footer">
+    <div class="container">
+
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="content">
+                    <p>
+                        Website design borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>
