@@ -7,7 +7,11 @@
   <meta name="keywords" content="Robot Manipulation,Imitation Learning,Reinforcement Learning">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EPG: Equipushgrasp</title>
-
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true}, "HTML-CSS": {minScaleAdjust: 100} });
+  </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
   <script>
@@ -43,107 +47,155 @@
 <body>
 
 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">EPG: Equipushgrasp</h1>
-          <div class="is-size-5 publication-authors">
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+            <a class="navbar-item" href="https://heng-tian.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+            </a>
 
-          </div>
-
-<!--           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Washington,</span>
-            <span class="author-block"><sup>2</sup>Google Research</span>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links"> -->
-              <!-- PDF Link.
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-<!--               <!-- Video Link. -->
-
-
-            </div>
-
-          </div>
+            <!--      <div class="navbar-item has-dropdown is-hoverable">-->
+            <!--        <a class="navbar-link">-->
+            <!--          More Related Research-->
+            <!--        </a>-->
+            <!--        <div class="navbar-dropdown">-->
+            <!--          <a class="navbar-item" href="https://pointw.github.io/equi_rl_page/">-->
+            <!--            Equivairant Reinforcement Learning-->
+            <!--          </a>-->
+            <!--          <a class="navbar-item" href="https://pointw.github.io/equi_q_page/">-->
+            <!--            Equivariant Q-Learning-->
+            <!--          </a>-->
+            <!--          <a class="navbar-item" href="https://pointw.github.io/equi_robot_page/">-->
+            <!--            On Robot Equivariant Learning-->
+            <!--          </a>-->
+            <!--          <a class="navbar-item" href="https://pointw.github.io/extrinsic_page/">-->
+            <!--            Extrinsic Equivariance-->
+            <!--          </a>-->
+            <!--        </div>-->
+            <!--      </div>-->
         </div>
-      </div>
+
+    </div>
+</nav>
+
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
+                    <h1 class="title is-1 publication-title">EPG: Equivariant PushGrasp </h1>
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block">
+                          <a href="https://bocehu.github.io/">Boce Hu</a><sup>$\star$</sup>,
+                        </span>
+                                    
+                        <span class="author-block">
+                          <a href="https://www.heng-tian.github.io/">Heng Tian</a><sup>$\star$</sup>,
+                        </span>
+                      
+                        <span class="author-block">
+                          <a href="https://www.dianwang.io/">Dian Wang</a>,
+                        </span>
+                                    
+                        <span class="author-block">
+                          <a href="https://haojhuang.github.io/">Haojie Huang</a>,
+                        </span>
+                                    
+                        <span class="author-block">
+                          <a href="https://zxp-s-works.github.io/">Xupeng Zhu</a>,
+                        </span>
+                                    
+                        <span class="author-block">
+                          <a href="https://www.robinwalters.com/">Robin Walters</a>,
+                        </span>
+                                    
+                        <span class="author-block">
+                          <a href="https://helpinghandslab.netlify.app/people/">Robert Platt</a>
+                        </span>
+                    </div>
+
+                    <div class="is-size-5 publication-authors">
+                        <div class="author-block">Northeastern University</div>
+                        <div>
+                            <span class="author-block"
+                                  style="color: gray;"><sup>$\star$</sup>equal contribution</span>
+                        </div>
+                        <div><b>IEEE Robotics and Automation Letters (RAL) </b></div>
+                    </div>
+
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+                            <!-- PDF Link. -->
+                            <span class="link-block">
+                              <a href="https://ieeexplore.ieee.org/document/11150764"
+                                 class="external-link button is-normal is-rounded is-dark custom-button-text">
+                                <span class="icon">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                </span>
+                                <span>Paper</span>
+                              </a>
+                            </span>
+
+                            <!-- Video Link. -->
+                            <span class="link-block">
+                              <a href="https://youtu.be/Y3UxZMPc0ms"
+                                 class="external-link button is-normal is-rounded is-dark custom-button-text">
+                                <span class="icon">
+                                    <i class="fab fa-youtube"></i>
+                                </span>
+                                <span>Video</span>
+                              </a>
+                            </span>
+                            <!-- Tweet Link. -->
+                            <span class="link-block">
+                              <a href="https://x.com/boce_hu/status/1849876632850530672"
+                                      class="external-link button is-normal is-rounded is-dark custom-button-text">
+                                <span class="icon">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </span>
+                                <span>Tweet</span>
+                              </a>
+                            </span>
+                            <!-- Code Link. -->
+                            <span class="link-block">
+                              <a href="https://github.com/BoceHu/orbitgrasp"
+                                      class="external-link button is-normal is-rounded is-dark custom-button-text">
+                                <span class="icon">
+                                    <i class="fab fa-github"></i>
+                                </span>
+                                <span>Code</span>
+                                </a>
+                            </span>
+                            <!-- Dataset Link.
+                            <span class="link-block">
+                              <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                                 class="external-link button is-normal is-rounded is-dark">
+                                <span class="icon">
+                                    <i class="far fa-images"></i>
+                                </span>
+                                <span>Data</span>
+                                </a> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- <section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section> -->
 
 
-
-
-
-
-
-
-
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
 
 </body>
 </html>
