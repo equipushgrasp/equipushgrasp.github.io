@@ -62,26 +62,6 @@
           <i class="fas fa-home"></i>
       </span>
             </a>
-
-            <!--      <div class="navbar-item has-dropdown is-hoverable">-->
-            <!--        <a class="navbar-link">-->
-            <!--          More Related Research-->
-            <!--        </a>-->
-            <!--        <div class="navbar-dropdown">-->
-            <!--          <a class="navbar-item" href="https://pointw.github.io/equi_rl_page/">-->
-            <!--            Equivairant Reinforcement Learning-->
-            <!--          </a>-->
-            <!--          <a class="navbar-item" href="https://pointw.github.io/equi_q_page/">-->
-            <!--            Equivariant Q-Learning-->
-            <!--          </a>-->
-            <!--          <a class="navbar-item" href="https://pointw.github.io/equi_robot_page/">-->
-            <!--            On Robot Equivariant Learning-->
-            <!--          </a>-->
-            <!--          <a class="navbar-item" href="https://pointw.github.io/extrinsic_page/">-->
-            <!--            Extrinsic Equivariance-->
-            <!--          </a>-->
-            <!--        </div>-->
-            <!--      </div>-->
         </div>
 
     </div>
@@ -225,7 +205,7 @@
                 <h2 class="title is-3">Abstract</h2>
                 <div class="content has-text-justified">
                     <p>
-                        Goal-conditioned robotic grasping in cluttered environments remains a challenging
+                         Goal-conditioned robotic grasping in cluttered environments remains a challenging
                          problem due to occlusions caused by surrounding objects, which prevent direct access 
                          to the target object. A promising solution to mitigate this issue is combining pushing 
                          and grasping policies, enabling active rearrangement of the scene to facilitate target 
@@ -249,22 +229,23 @@
         <!-- Abstract. -->
         <div class="columns is-centered has-text-centered">
             <div class="column">
-                <h2 class="title is-3">Introduction</h2>
-                <h4 class="title is-4">Summary of EPG</h4>
+                <h2 class="title is-3">Summary of EPG</h2>
                 <div class="content has-text-justified">
                     <p>
-                        In this paper, we introduce the \textbf{Equivariant PushGrasp (EPG)} Network, 
+                        In this work, we introduce the $\textbf{Equivariant PushGrasp (EPG)}$ Network, 
                         a novel framework for efficient goal-conditioned push-grasp policy learning in 
                         cluttered environments. EPG leverages inherent task symmetries to improve both 
                         sample efficiency and performance. Specifically, we model the pushing and grasping 
                         policies using $SE(2)$-equivariant neural networks, embedding rotational and 
                         translational symmetry as an inductive bias. This design substantially enhances 
-                        the model's generalization and data efficiency. Furthermore, we propose a
-                         self-supervised training approach that optimizes the pushing policy with a 
-                         reward signal defined as the change in grasping scores before and after each push. 
-                         This formulation simplifies the training procedure and naturally couples the learning 
-                         of pushing and grasping.
+                        the model's generalization and data efficiency. Furthermore, we propose a 
+                        self-supervised training approach that optimizes the pushing policy with a 
+                        reward signal defined as the change in grasping scores before and after each push. 
+                        This formulation simplifies the training procedure and naturally couples the learning 
+                        of pushing and grasping.
                     </p>
+
+                    <h4 class="title is-4 has-text-centered">Workflow of EPG</h4>
                     <p align="center">
                         <img src="./static/images/teaser.png" alt="" style="width:90%"></img>
                     </p>
@@ -274,16 +255,15 @@
                          and executes push actions to create sufficient space for grasping the target. 
                          The final grasp pose is shown as a blue rectangle, with green blocks indicating the gripper's fingers.
                     </p>
+                    <h4 class="title is-4 has-text-centered">Model Architecture of EPG</h4>
                     <p align="center">
                         <img src="./static/images/pipeline.png"></img>
                     </p>
                     <p>
-                        The key contribution of our work is a novel push-grasp framework for efficient 
-                        target object retrieval. As illustrated above, our workflow
-                        consists of three key components: a CriticNet, a GraspNet, and a PushNet. 
+                        Our model consists of three key components: a CriticNet, a GraspNet, and a PushNet. 
                         At each time step, GraspNet and PushNet generate a grasp action and a push action with 
                         respect to the target object. CriticNet then evaluates the grasp action by assigning it a score. 
-                        If the score exceeds a predefined threshold $tau$ or the maximum number of push attempts is reached,
+                        If the score exceeds a predefined threshold $\tau$ or the maximum number of push attempts is reached,
                         the grasp action is executed. Otherwise, the push action is executed, and the process repeats with 
                         an updated observation.
                     </p>
@@ -293,33 +273,16 @@
                 <div class="content has-text-justified">
 
                     <p>
-                        Previous works often rely on complex alternating training between grasp and push networks, 
-                        which can lead to unstable convergence and difficulty in balancing learning dynamics.
-                        In contrast, we propose a simple two-step training process. First we train a universal, 
-                        goal-agnostic GraspNet together with a CriticNet that evaluates predicted grasps and returns a score. 
+                        Compared to previous works that rely on complex alternating training between grasp and push networks, we propose a simple two-step training process. 
+                        First we train a universal, goal-agnostic GraspNet together with a CriticNet that evaluates predicted grasps and returns a score. 
                         Then, we use the difference in grasp scores before and after pushing, computed from the CriticNet,
-                         as a reward signal to train a goal-conditioned PushNet. This decoupled training strategy 
-                         eliminates the need for alternating optimization and its scheduling-related hyperparameters, 
-                         making the training more stable, controllable, and efficient.
+                        as a reward signal to train a goal-conditioned PushNet. This decoupled training strategy 
+                        eliminates the need for alternating optimization and its scheduling-related hyperparameters, 
+                        making the training more stable, controllable, and efficient. For more details, please refer to the paper.
                     </p>
                     <p align="center">
                         <img src="./static/images/train_pipeline.png" style="width:100%"></img>
                     </p>
-                    <p>
-                      Specifically, after the simulation scene is initialized, segmentation is first applied to obtain 
-                      object masks. The Grasp Imagination Module stores the initial state and simulates grasp attempts 
-                      for each mask sequentially. After each simulated grasp, the environment is restored to the initial state. 
-                      The training episode for pushing begins once a grasp attempt fails. The PushNet $phi$ will predict 
-                      the $Q$ value for all pushing actions, and an $epsilon$-greedy policy will be executed. 
-                      After the push action, the Grasp Imagination Module simulates the grasp action again to assess
-                       the new grasp feasibility. If the grasp succeeds, the push action is considered optimal, 
-                       and the reward is 1. If the grasp fails, we use an adaptive reward defined as the difference 
-                       between the predicted grasp scores before and after the push estimated by $sigma$, 
-                       as a good push should improve the grasp feasibility. The episode terminates when a simulated grasp 
-                       succeeds or the maximum pushing attempts are reached. The system then moves on to the next target 
-                       mask or re-initializes the scene if all masks are iterated.
-                    </p>
-                    <p align="center">
                 </div>
             </div>
         </div>
@@ -330,31 +293,141 @@
     <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
             <div class="column">
-                <h2 class="title is-3">Simulation Experiments</h2>
+                <h2 class="title is-3">Experiments</h2>
                 <div class="content has-text-justified">
                     <p>
-                        To evaluate our push-grasp framework, we conduct experiments in both simulation and real-world environments, 
-                        with the setup illustrated in Figure \ref{fig:experienment_setup}. \revision{We use PyBullet~\cite{coumans2016pybullet} 
-                        as our simulation environment, as it provides sufficient accuracy for our open-loop push and grasp primitives, 
-                        which involve simple rigid-body interactions.} The evaluation consists of three tasks:\\
-                        \textbf{Goal-Conditioned Push-Grasp in Clutter.} This task assesses our framework's ability 
-                        to retrieve a specific object from a cluttered scene. Following \cite{huang2022edgegraspnetworkgraphbased,
-                        hu2024orbitgrasp}, objects are randomly initialized, but with one designated as the target.
-                        The robot performs push actions if needed before grasping the target.\\ 
-                        \textbf{Clutter Clearing.} This task evaluates the ability to clear an entire scene without any predefined 
-                        target or grasp sequence. The setup follows the previous task.\\
-                        \revision{\textbf{Goal-Conditioned Push-Grasp in Tight Layouts.}} Figure \ref{fig:specialcase_real} 
-                        shows the task configuration. Objects are arranged in challenging geometric configurations (e.g., tight clusters, narrow gaps). This is a hard task because the robot must push strategically to create graspable space in a constrained environment.
+                        We conduct experiments in both simulation and real-world environments to evaluate our method, with the setup
+                        illustrated below. The evaluation consists of three tasks:
                     </p>
+                    
+                    <ul>
+                        <li>
+                            <strong>Goal-Conditioned Push-Grasp in Clutter:</strong>
+                            This task assesses our framework's ability to retrieve a specific object from a cluttered scene.
+                        </li>
+                        <li>
+                            <strong>Clutter Clearing:</strong>
+                            This task evaluates the ability to clear an entire scene without any predefined target or grasp sequence.
+                        </li>
+                        <li>
+                            <strong>Goal-Conditioned Push-Grasp in Tight Layouts:</strong>
+                            In this task, objects are arranged in challenging geometric configurations (e.g., tight clusters, narrow gaps).
+                            This is a hard task because the robot must push strategically to create graspable space in a constrained
+                            environment.
+                        </li>
+                    </ul>
+
                 </div>
 
                 <div class="column is-centered">
-                    <img src="./static/images/sim_setting.png" style="width:75%"></img>
+                    <img src="./static/images/experiment_setup.png" style="width:55%"></img>
                 </div>
 
-                <div class="content has-text-centered">
+                <div class="content has-text-centered has-text-justified">
+                    <h4 class="title is-5 has-text-centered">
+                        $\textbf{Simulation Experiment Result}$
+                        
+                    </h4>
+                    <div class="column is-centered">
+                        <img src="./static/images/table1.png" style="width:95%"></img>
+                    </div>
                     <p>
-                        $\textbf{Visualization of Pile Scene}$
+                        The comparison result for the $\textbf{Goal-conditioned
+                        Push-Grasp in Clutter task}$. Our method achieves the best performance, significantly outperforming all baselines.
+                        On average, across all the settings with different number of
+                        objects, it surpasses the best baseline by 44.7% in Grasp Success Rate (GSR).
+                        The first two variations (Table I, row 3 and 4) show that integrating our approach into existing baselines further
+                        improves their performance, which highlights our design’s effectiveness.
+                    </p>
+
+                    <div class="column is-centered">
+                        <img src="./static/images/table2.png" style="width:95%"></img>
+                    </div>
+                    <p>
+                        This table shows the results of the $\textbf{Clutter Clearing task}$.
+                        Although this task is target-agnostic, push actions remain
+                        beneficial in cluttered environments. Since there is no specific
+                        target, we use the object with the highest score from GraspNet
+                        as the target object for each step. The results show that our
+                        method’s grasping capability exceeds all baselines by a large
+                        margin in both with and without push actions.
+                    </p>
+                </div>
+
+
+                <div class="content has-text-centered has-text-justified">
+                    <h4 class="title is-5 has-text-centered">
+                        $\textbf{Real-world Experiment Result}$
+                
+                    </h4>
+                    <div class="columns is-centered">
+                        <div class="column is-narrow has-text-centered">
+                            <img src="./static/images/table4.png" style="width:45%;" />
+                        </div>
+                    </div>
+                    <p>
+                        This table presents the results of the real-world $\textbf{Goal-conditioned Push-Grasp in Clutter}$ task.
+                        Our EPG significantly outperforms all baselines by at least
+                        35% in GSR. The primary failure cases are: 1) inaccurate
+                        object masks from SAM2, which further affect PushNet and
+                        CriticNet outputs; 2) imprecise grasp poses predicted by the
+                        GraspNet. Despite these challenges, our method demonstrates
+                        strong overall stability.
+                    </p>
+                
+                    <div class="columns is-centered">
+                        <div class="column is-narrow has-text-centered">
+                            <img src="./static/images/table3.png" style="width:35%;" />
+                        </div>
+                        
+                    </div>
+
+                    <div class="columns is-multiline is-mobile is-centered">
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC1.png" />
+                            <p class="is-size-7">case1</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC2.png" />
+                            <p class="is-size-7">case2</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC3.png" />
+                            <p class="is-size-7">case3</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC4.png" />
+                            <p class="is-size-7">case4</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC5.png" />
+                            <p class="is-size-7">case5</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC6.png" />
+                            <p class="is-size-7">case6</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC7.png" />
+                            <p class="is-size-7">case7</p>
+                        </div>
+                        <div class="column is-one-eighth has-text-centered">
+                            <img src="./static/images/Special_Case_Real/SC8.png" />
+                            <p class="is-size-7">case8</p>
+                        </div>
+                    </div>
+
+                    <p>
+                        The configuration of the real-world $\textbf{Goal-Conditioned Push-Grasp in
+                        Tight Layouts}$ task is shown above. It contains eight different
+                        cases, each with a varying number of small boxes placed in
+                        specific positions. The objective is to grasp the yellow box,
+                        which is consistently placed at the center of surrounding boxes.
+                        These tasks are unseen during training and require effective
+                        strategies to solve, placing a strong demand on the generalization ability.
+                        The results in this table indicate that despite increasing task
+                        complexity, our method consistently outperforms the baselines
+                        while maintaining stable performance.
                     </p>
                 </div>
 
@@ -396,18 +469,21 @@
     </div>
 </section>
 
-<section class="section">
-    <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-            <div class="column">
-
-            </div>
-        </div>
+<section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+        <h3 class="title">Citation</h3>
+        <pre><code>
+@ARTICLE{
+    11150764,
+    author={Hu, Boce and Tian, Heng and Wang, Dian and Huang, Haojie and Zhu, Xupeng and Walters, Robin and Platt, Robert},
+    journal={IEEE Robotics and Automation Letters},
+    title={Push-Grasp Policy Learning Using Equivariant Models and Grasp Score Optimization},
+    year={2025},
+    doi={10.1109/LRA.2025.3606392}
+}
+    </code></pre>
     </div>
 </section>
-
-</body>
-</html>
 
 
 <footer class="footer">
